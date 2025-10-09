@@ -47,8 +47,10 @@ const router = express.Router();
  *                   type: integer
  *                 example: [2, 3, 4]
  *     responses:
- *       201:
+ *       200:
  *         description: Poll created successfully
+ *       400:
+ *         description: Poll created failed
  */
 router.post("/", createPoll);
 
@@ -67,6 +69,8 @@ router.post("/", createPoll);
  *     responses:
  *       200:
  *         description: List of polls
+ *       404:
+ *         description: Poll not found
  */
 router.get("/user/:userId", getPollsByUser);
 
@@ -138,7 +142,7 @@ router.get("/:pollId/can-vote/:userId", checkVotingPermission);
  *                 type: integer
  *                 example: 5
  *     responses:
- *       201:
+ *       200:
  *         description: Voter added successfully
  */
 router.post("/:pollId/voters", addVoterToPoll);

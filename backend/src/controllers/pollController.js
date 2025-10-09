@@ -40,7 +40,7 @@ export const createPoll = async (req, res, next) => {
     
     await client.query('COMMIT');
     
-    res.status(201).json({ 
+    res.status(200).json({ 
       message: "Poll created successfully", 
       poll 
     });
@@ -65,7 +65,11 @@ export const getPollsByUser = async (req, res, next) => {
        ORDER BY p.created_date DESC`,
       [userId]
     );
-    
+
+    if (pollResult.rows.length === 0) {
+      return res.status(404).json({ error: "Poll not found" });
+    }
+
     res.json(result.rows);
   } catch (error) {
     next(error);
@@ -136,7 +140,7 @@ export const addVoterToPoll = async (req, res, next) => {
       [pollId, user_id]
     );
     
-    res.status(201).json({ message: "Voter added successfully" });
+    res.status(200).json({ message: "Voter added successfully" });
   } catch (error) {
     next(error);
   }

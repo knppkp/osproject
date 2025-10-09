@@ -30,7 +30,7 @@ const router = express.Router();
  *                 type: string
  *                 example: john@example.com
  *     responses:
- *       201:
+ *       200:
  *         description: User registered successfully
  *       400:
  *         description: Bad request

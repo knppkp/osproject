@@ -26,8 +26,10 @@ const router = express.Router();
  *                 type: integer
  *                 example: 1
  *     responses:
- *       201:
+ *       200:
  *         description: Choice added successfully
+ *       400:
+ *         description: Choice created failed
  */
 router.post("/", addChoice);
 

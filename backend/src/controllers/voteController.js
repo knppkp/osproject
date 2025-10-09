@@ -180,7 +180,15 @@ export const getPollResults = async (req, res, next) => {
   
   try {
     const result = await pool.query(
-      `SELECT c.choice_id, c.choice_text, c.point
+      `SELECT 
+         c.choice_id, 
+         c.choice_text, 
+         c.point,
+         CASE 
+           WHEN SUM(c.point) OVER () > 0 
+           THEN ROUND((c.point::numeric / SUM(c.point) OVER ()) * 100, 2)::float
+           ELSE 0 
+         END as percentage
        FROM choice c
        LEFT JOIN vote v ON c.choice_id = v.choice_id
        WHERE c.poll_id = $1

@@ -13,7 +13,7 @@ export const addChoice = async (req, res, next) => {
       [choice_text, poll_id]
     );
     
-    res.status(201).json({ 
+    res.status(200).json({ 
       message: "Choice added successfully", 
       choice: result.rows[0] 
     });

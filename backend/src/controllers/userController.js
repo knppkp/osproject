@@ -16,7 +16,7 @@ export const registerUser = async (req, res, next) => {
       [name, hashedPassword, email]
     );
     
-    res.status(201).json({ 
+    res.status(200).json({ 
       message: "User registered successfully", 
       user: result.rows[0] 
     });
