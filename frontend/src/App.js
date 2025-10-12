@@ -1,38 +1,21 @@
-// import { useEffect, useState } from "react";
-// import axios from "axios";
-// import "./App.css";
-
-// function App() {
-//   const [data, setData] = useState("");
-//   const [thing, setThing] = useState("");
-
-//   useEffect(() => {
-//     axios
-//       .get("/api")
-//       .then((res) => {
-//         setData(res.data.time.now);
-//         setThing(res.data.test);
-//         console.log(res.data);
-//       })
-//       .catch((err) => console.error(err));
-//   }, []);
-
-import React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./App.css";
 
+// Zod schema for login
 const loginSchema = z.object({
-  username: z.string().min(1, { message: "Username is required" }),
+  email: z.string().email({ message: "Valid email is required" }),
   password: z.string().min(1, { message: "Password is required" }),
 });
 
 function App() {
   const navigate = useNavigate();
+  const [apiError, setApiError] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -42,11 +25,30 @@ function App() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log("Form submitted:", data);
-    alert("Form submitted successfully!");
-    navigate("/homepage");
-    reset();
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post("/api/users/login", {
+        email: data.email,
+        password: data.password,
+      });
+
+      console.log("Login Response:", response.data);
+
+      const { user_id, name, email } = response.data.user;
+      localStorage.setItem(
+        "userSession",
+        JSON.stringify({ id: user_id, name, email })
+      );
+
+      alert("Login Successful!");
+      reset();
+      navigate("/homepage");
+    } catch (err) {
+      console.error("Login Error:", err);
+      setApiError(
+        err.response?.data?.message || "Login failed. Please try again."
+      );
+    }
   };
 
   return (
@@ -57,10 +59,8 @@ function App() {
         <p className="login-text">Log In</p>
 
         <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-          <input type="text" placeholder="Username" {...register("username")} />
-          {errors.username && (
-            <p className="error">{errors.username.message}</p>
-          )}
+          <input type="email" placeholder="Email" {...register("email")} />
+          {errors.email && <p className="error">{errors.email.message}</p>}
 
           <input
             type="password"
@@ -70,6 +70,9 @@ function App() {
           {errors.password && (
             <p className="error">{errors.password.message}</p>
           )}
+
+          {apiError && <p className="error">{apiError}</p>}
+
           <p className="hoverLine">
             <Link to="/signup">Don’t have an account? Sign up</Link>
           </p>
