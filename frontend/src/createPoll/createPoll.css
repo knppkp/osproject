@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #c6d6f7, #e9ecf7);
+  background: linear-gradient(135deg, #c3d1ff, #e5ceff);
 }
 
 .createpoll-card {
@@ -36,6 +36,7 @@
   background-color: #4a73f5;
   color: white;
   transition: 0.2s ease;
+  font-family: "Poppins", sans-serif;
 }
 
 .add-option:hover,
@@ -54,16 +55,17 @@
 .error {
   color: red;
   font-size: 0.85rem;
+  font-family: "Poppins", sans-serif;
 }
 
-.createpoll-container {
+/* .createpoll-container {
   max-width: 600px;
   margin: 40px auto;
   background: #fff;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .choice-list,
 .user-search-dropdown {
@@ -84,4 +86,8 @@
   cursor: pointer;
   margin-left: 5px;
   color: #f00;
+}
+
+.addfont {
+  font-family: "Poppins", sans-serif;
 }

@@ -8,7 +8,7 @@
 html,
 body {
   height: 100%;
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 /* Container for entire page */
@@ -25,12 +25,13 @@ body {
   left: 0;
   right: 0;
   height: 60px;
-  background-color: #6e8efb;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
   color: white;
   display: flex;
   align-items: center;
+  justify-content: space-around;
   padding: 0 20px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   z-index: 1000;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -74,6 +75,22 @@ body {
   color: white;
 }
 
+.sidebar li button {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background-color: transparent; /* inherit sidebar background */
+  color: inherit; /* inherit text color */
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.sidebar li button:focus {
+  outline: none; /* remove default focus */
+}
+
 /* Main content */
 .main-content {
   margin-left: 200px; /* space for sidebar */
@@ -86,10 +103,15 @@ body {
 
 /* Poll container placeholder */
 .poll-container {
-  width: 100%;
-  min-height: 500px;
-  background-color: #fff;
-  border-radius: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  justify-items: center;
   padding: 20px;
+}
+
+.poll-card {
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
 }

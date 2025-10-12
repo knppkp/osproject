@@ -6,6 +6,8 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./signUp.css";
 
+import icon from "../assets/poll_icon.svg";
+
 // Zod schema for sign up
 const signUpSchema = z
   .object({
@@ -57,7 +59,10 @@ function SignUp() {
 
   return (
     <div className="app-container">
+      <div className="shape shape1"></div>
+      <div className="shape shape2"></div>
       <div className="login-card">
+        <img src={icon} alt="login icon" className="login-icon" />
         <p className="login-text">Sign Up</p>
 
         <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
@@ -85,9 +90,11 @@ function SignUp() {
             <p className="error">{errors.confirmPassword.message}</p>
           )}
 
-          <p className="hoverLine">
-            <Link to="/">Already have an account? Log In</Link>
-          </p>
+          <div className="center">
+            <p className="hoverLine">
+              <Link to="/">Already have an account? Log In</Link>
+            </p>
+          </div>
 
           <button type="submit" className="login-button">
             Sign Up

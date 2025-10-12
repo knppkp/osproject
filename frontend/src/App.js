@@ -6,6 +6,8 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./App.css";
 
+import icon from "./assets/poll_icon.svg";
+
 // Zod schema for login
 const loginSchema = z.object({
   email: z.string().email({ message: "Valid email is required" }),
@@ -56,7 +58,8 @@ function App() {
       <div className="shape shape1"></div>
       <div className="shape shape2"></div>
       <div className="login-card">
-        <p className="login-text">Log In</p>
+        <img src={icon} alt="login icon" className="login-icon" />
+        <p className="login-text">Login</p>
 
         <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
           <input type="email" placeholder="Email" {...register("email")} />
@@ -73,9 +76,11 @@ function App() {
 
           {apiError && <p className="error">{apiError}</p>}
 
-          <p className="hoverLine">
-            <Link to="/signup">Don’t have an account? Sign up</Link>
-          </p>
+          <div className="center">
+            <p className="hoverLine">
+              <Link to="/signup">Don’t have an account? Sign up</Link>
+            </p>
+          </div>
 
           <button type="submit" className="login-button">
             Log In

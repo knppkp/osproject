@@ -358,6 +358,7 @@ function CreatePoll() {
           {/* Poll Name */}
           <label>Poll Name</label>
           <input
+            className="addfont"
             type="text"
             placeholder="Enter poll name..."
             {...register("poll_name")}
@@ -368,7 +369,11 @@ function CreatePoll() {
 
           {/* Due Date */}
           <label>Due Date</label>
-          <input type="datetime-local" {...register("due_date")} />
+          <input
+            className="addfont"
+            type="datetime-local"
+            {...register("due_date")}
+          />
           {errors.due_date && (
             <p className="error">{errors.due_date.message}</p>
           )}
@@ -378,6 +383,7 @@ function CreatePoll() {
           {fields.map((field, index) => (
             <div key={field.id} className="option-row">
               <input
+                className="addfont"
                 type="text"
                 placeholder={`Choice ${index + 1}`}
                 {...register(`choices.${index}.text`)}
@@ -406,6 +412,7 @@ function CreatePoll() {
           {/* Voter Search */}
           <label>Add Voters</label>
           <input
+            className="addfont"
             type="text"
             placeholder="Search user by name..."
             value={searchTerm}

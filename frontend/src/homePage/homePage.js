@@ -146,7 +146,9 @@ function Homepage() {
 
       <aside className="sidebar">
         <ul>
-          <button onClick={handleCreatePoll}>Create poll</button>
+          <li>
+            <button onClick={handleCreatePoll}>Create poll</button>
+          </li>
           <li>Home</li>
           <li>User Poll</li>
           <li>

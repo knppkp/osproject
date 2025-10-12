@@ -45,7 +45,7 @@
   left: 0;
   top: 0;
   bottom: 0;
-  background-color: #6e8efb;
+  background: linear-gradient(135deg, #94d6ff, #f1b0ff);
   z-index: 0;
   border-radius: 30px;
   transition: width 0.3s ease;
@@ -55,4 +55,5 @@
 .percent-text {
   position: relative; /* text above progress fill */
   z-index: 1;
+  font-family: "Poppins", sans-serif;
 }

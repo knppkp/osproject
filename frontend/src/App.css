@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: "Poppins", sans-serif;
 }
 
 html,
@@ -54,7 +55,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
   overflow: hidden;
 }
 
@@ -106,6 +107,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  font-family: "Poppins", sans-serif;
 }
 
 .login-form input {
@@ -115,6 +117,7 @@ body {
   background: #f0f0f0;
   font-size: 16px;
   outline: none;
+  font-family: "Poppins", sans-serif;
 }
 
 .login-form input:focus {
@@ -131,10 +134,11 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: 0.3s;
+  font-family: "Poppins", sans-serif;
 }
 
 .login-button:hover {
-  background: #5571e1;
+  background: #a777e3;
 }
 
 /* Error messages */
@@ -149,7 +153,6 @@ body {
   color: black;
   font-size: 14px;
   font-weight: 500;
-  margin-left: -7rem;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
@@ -158,4 +161,15 @@ body {
 .hoverLine:hover {
   color: #5571e1;
   text-decoration: underline;
+}
+
+.center {
+  flex-direction: row;
+  margin-left: 3rem;
+}
+/* login icon */
+.login-icon {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
 }
