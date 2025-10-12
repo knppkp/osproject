@@ -181,7 +181,7 @@ function CreatePoll() {
             className="add-option"
             onClick={() => append({ text: "" })}
           >
-            ➕ Add Choice
+            Add Choice
           </button>
 
           {/* Voter Search */}
