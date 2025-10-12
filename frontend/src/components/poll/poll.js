@@ -1,55 +1,4 @@
-// import React, { useState } from "react";
-// import "./poll.css";
-
-// function Poll({ pollData }) {
-//   console.log("Poll data received:", pollData); // check structure
-
-//   const [showResults, setShowResults] = useState(false);
-
-//   if (!pollData) return <p>Loading poll...</p>;
-
-//   const { poll_name, choices } = pollData;
-
-//   if (!Array.isArray(choices) || choices.length === 0) {
-//     return <p>No choices available</p>;
-//   }
-
-//   const handleVote = () => {
-//     setShowResults(true);
-//   };
-
-//   return (
-//     <div className="poll-card">
-//       <h2 className="poll-title">{poll_name}</h2>
-
-//       <div className="poll-choices">
-//         {choices.map((choice) => (
-//           <button
-//             key={choice.choice_id}
-//             className="choice-button"
-//             onClick={handleVote}
-//           >
-//             {/* Show progress only after voting */}
-//             {showResults && (
-//               <div
-//                 className="progress-fill-button"
-//                 style={{ width: `${choice.percent || 0}%` }}
-//               />
-//             )}
-//             <span className="choice-text">{choice.choice_text}</span>
-//             {showResults && (
-//               <span className="percent-text">{choice.percent || 0}%</span>
-//             )}
-//           </button>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Poll;
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./poll.css";
 
@@ -58,7 +7,18 @@ function Poll({ pollData, userId }) {
   const [choices, setChoices] = useState([]);
   const [userVote, setUserVote] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showAddVoter, setShowAddVoter] = useState(false);
+  const [showAddChoice, setShowAddChoice] = useState(false);
+  const [newChoiceText, setNewChoiceText] = useState("");
 
+  const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [selectedVoter, setSelectedVoter] = useState(null);
+  const [voterError, setVoterError] = useState("");
+
+  const menuRef = useRef(null);
   const pollId = pollData?.poll_id;
 
   useEffect(() => {
@@ -85,6 +45,16 @@ function Poll({ pollData, userId }) {
     fetchData();
   }, [pollId, userId]);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const handleVote = async (choiceId) => {
     try {
       if (!userVote) {
@@ -109,12 +79,119 @@ function Poll({ pollData, userId }) {
     }
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this poll?")) return;
+    try {
+      await axios.delete(`/api/polls/${pollId}`);
+      alert("Poll deleted successfully.");
+      window.location.reload();
+    } catch (err) {
+      console.error("Error deleting poll:", err);
+    }
+  };
+
+  // Fetch all users for searching
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get("/api/users");
+        setUsers(res.data);
+      } catch (err) {
+        console.error("Failed to load users:", err);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+  // Filter users as you type
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setFilteredUsers([]);
+    } else {
+      setFilteredUsers(
+        users.filter((u) =>
+          u.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    }
+  }, [searchTerm, users]);
+
+  // Handle voter selection
+  const selectVoter = (user) => {
+    setSelectedVoter(user);
+    setSearchTerm("");
+    setFilteredUsers([]);
+    setVoterError("");
+  };
+
+  // Add voter request (one at a time)
+  const handleAddVoter = async () => {
+    if (!selectedVoter) return alert("Please select a user before adding.");
+
+    try {
+      await axios.post(`/api/polls/${pollId}/voters`, {
+        user_id: selectedVoter.user_id,
+      });
+
+      alert(`Voter "${selectedVoter.name}" added successfully.`);
+      setShowAddVoter(false);
+      setSelectedVoter(null);
+    } catch (err) {
+      console.error("Error adding voter:", err);
+      alert("Failed to add voter.");
+    }
+  };
+
+  const handleAddChoice = async () => {
+    if (!newChoiceText.trim()) return alert("Please enter choice text");
+    try {
+      await axios.post("/api/choices", {
+        choice_text: newChoiceText,
+        poll_id: pollId,
+      });
+      alert("Choice added successfully.");
+      setShowAddChoice(false);
+      setNewChoiceText("");
+      window.location.reload();
+    } catch (err) {
+      console.error("Error adding choice:", err);
+    }
+  };
+
   if (loading) return <p>Loading poll...</p>;
   if (!pollData) return <p>No poll data found.</p>;
 
   return (
     <div className="poll-card">
-      <h2 className="poll-title">{pollData.poll_name}</h2>
+      <div className="poll-header">
+        <h2 className="poll-title">{pollData.poll_name}</h2>
+
+        {/* Only show menu to poll creator */}
+        {userId === pollData.creator_id && (
+          <div className="menu-container" ref={menuRef}>
+            <button
+              className="menu-button"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              ⋮
+            </button>
+
+            {menuOpen && (
+              <div className="menu-dropdown">
+                <button onClick={() => setShowAddVoter(true)}>Add Voter</button>
+                <hr />
+                <button onClick={() => setShowAddChoice(true)}>
+                  Add Choice
+                </button>
+                <hr />
+                <button onClick={handleDelete} className="delete-button">
+                  Delete Poll
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       <div className="poll-choices">
         {choices.map((choice) => (
@@ -133,9 +210,7 @@ function Poll({ pollData, userId }) {
                 }}
               />
             )}
-
             <span className="choice-text">{choice.choice_text}</span>
-
             {showResults && (
               <span className="percent-text">
                 {choice.percentage ? `${choice.percentage}%` : "0%"}
@@ -144,6 +219,78 @@ function Poll({ pollData, userId }) {
           </button>
         ))}
       </div>
+
+      {showAddVoter && (
+        <div className="dialog-overlay">
+          <div className="dialog">
+            <h3>Add Voter</h3>
+            <p className="info-text">⚠ You can only add one voter at a time.</p>
+
+            {/* Search Input */}
+            <input
+              type="text"
+              placeholder="Search user by name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="addfont"
+            />
+
+            {/* Error */}
+            {voterError && <p className="error">{voterError}</p>}
+
+            {/* Search Results */}
+            {searchTerm && (
+              <ul className="search-results">
+                {filteredUsers.map((u) => (
+                  <li key={u.user_id} onClick={() => selectVoter(u)}>
+                    {u.name} ({u.email})
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {/* Selected voter */}
+            {selectedVoter && (
+              <div className="selected-voter">
+                <span className="voter-tag">
+                  {selectedVoter.name}
+                  <button
+                    type="button"
+                    className="remove-voter"
+                    onClick={() => setSelectedVoter(null)}
+                  >
+                    ✖
+                  </button>
+                </span>
+              </div>
+            )}
+
+            <div className="dialog-actions">
+              <button onClick={handleAddVoter}>Add</button>
+              <button onClick={() => setShowAddVoter(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Choice Dialog */}
+      {showAddChoice && (
+        <div className="dialog-overlay">
+          <div className="dialog">
+            <h3>Add Choice</h3>
+            <input
+              type="text"
+              placeholder="Enter choice text"
+              value={newChoiceText}
+              onChange={(e) => setNewChoiceText(e.target.value)}
+            />
+            <div className="dialog-actions">
+              <button onClick={handleAddChoice}>Add</button>
+              <button onClick={() => setShowAddChoice(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

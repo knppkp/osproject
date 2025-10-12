@@ -119,8 +119,7 @@ function CreatePoll() {
     .filter((u) => u.name?.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const handleBack = () => {
-    navigate(-1); // go back to previous page
-    // OR navigate("/homepage"); // go to specific page
+    navigate(-1);
   };
   return (
     <div className="createpoll-container">
