@@ -160,7 +160,13 @@ function Homepage() {
       <main className="main-content">
         <div className="poll-container">
           {polls.length > 0 ? (
-            polls.map((poll) => <Poll key={poll.poll_id} pollData={poll} />)
+            polls.map((poll) => (
+              <Poll
+                key={poll.poll_id}
+                pollData={poll}
+                userId={user?.user_id || user?.id}
+              />
+            ))
           ) : (
             <p>No polls found.</p>
           )}

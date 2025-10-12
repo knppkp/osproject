@@ -90,4 +90,6 @@
 
 .addfont {
   font-family: "Poppins", sans-serif;
+  padding-left: 0.5rem;
+  height: 2rem;
 }
