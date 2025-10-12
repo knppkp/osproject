@@ -1,0 +1,58 @@
+.poll-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  text-align: center;
+}
+
+.poll-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.poll-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative;
+}
+
+.choice-button {
+  position: relative;
+  padding: 12px 20px;
+  border-radius: 30px;
+  border: none;
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 16px;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.choice-button:hover {
+  opacity: 0.9;
+}
+
+.progress-fill-button {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #6e8efb;
+  z-index: 0;
+  border-radius: 30px;
+  transition: width 0.3s ease;
+}
+
+.choice-text,
+.percent-text {
+  position: relative; /* text above progress fill */
+  z-index: 1;
+}

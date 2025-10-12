@@ -1,0 +1,95 @@
+/* Reset margins/padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Container for entire page */
+.homepage-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Top nav bar */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: #6e8efb;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-size: 18px;
+  font-weight: 500;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.user-name {
+  margin-left: auto; /* push username to the right if needed */
+}
+
+/* Page layout below top nav */
+.homepage-container > .sidebar,
+.homepage-container > .main-content {
+  margin-top: 60px; /* leave space for top nav */
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 200px;
+  bottom: 0;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  padding: 15px 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.sidebar li:hover {
+  background-color: #6e8efb;
+  color: white;
+}
+
+/* Main content */
+.main-content {
+  margin-left: 200px; /* space for sidebar */
+  padding: 20px;
+  flex: 1;
+  background-color: #f4f4f4;
+  overflow-y: auto;
+  height: calc(100vh - 60px); /* full height minus top nav */
+}
+
+/* Poll container placeholder */
+.poll-container {
+  width: 100%;
+  min-height: 500px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
