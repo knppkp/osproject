@@ -1,44 +1,44 @@
 import React, { useState } from "react";
 import "./poll.css";
 
-function Poll() {
-  const pollTitle = "What's your favorite programming language?";
+function Poll({ pollData }) {
+  console.log("Poll data received:", pollData); // check structure
 
-  const initialChoices = [
-    { id: 1, text: "JavaScript", percent: 45 },
-    { id: 2, text: "Python", percent: 30 },
-    { id: 3, text: "C++", percent: 15 },
-    { id: 4, text: "Java", percent: 10 },
-  ];
-
-  const [choices] = useState(initialChoices);
   const [showResults, setShowResults] = useState(false);
 
+  if (!pollData) return <p>Loading poll...</p>;
+
+  const { poll_name, choices } = pollData;
+
+  if (!Array.isArray(choices) || choices.length === 0) {
+    return <p>No choices available</p>;
+  }
+
   const handleVote = () => {
-    setShowResults(true); // show results after first click
+    setShowResults(true);
   };
 
   return (
     <div className="poll-card">
-      <h2 className="poll-title">{pollTitle}</h2>
+      <h2 className="poll-title">{poll_name}</h2>
 
       <div className="poll-choices">
         {choices.map((choice) => (
           <button
-            key={choice.id}
+            key={choice.choice_id}
             className="choice-button"
             onClick={handleVote}
           >
-            {/* Only show progress fill after click */}
+            {/* Show progress only after voting */}
             {showResults && (
               <div
                 className="progress-fill-button"
-                style={{ width: `${choice.percent}%` }}
-              ></div>
+                style={{ width: `${choice.percent || 0}%` }}
+              />
             )}
-            <span className="choice-text">{choice.text}</span>
+            <span className="choice-text">{choice.choice_text}</span>
             {showResults && (
-              <span className="percent-text">{choice.percent}%</span>
+              <span className="percent-text">{choice.percent || 0}%</span>
             )}
           </button>
         ))}

@@ -55,3 +55,33 @@
   color: red;
   font-size: 0.85rem;
 }
+
+.createpoll-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.choice-list,
+.user-search-dropdown {
+  list-style: none;
+  padding: 0;
+}
+
+.voter-tag {
+  display: inline-block;
+  background: #e0f0ff;
+  border-radius: 8px;
+  padding: 5px 10px;
+  margin: 5px;
+}
+.voter-tag button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-left: 5px;
+  color: #f00;
+}
