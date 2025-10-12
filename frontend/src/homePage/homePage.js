@@ -88,6 +88,8 @@ import Poll from "../components/poll/poll";
 import axios from "axios";
 import "./homePage.css";
 
+import navicon from "../assets/navicon.svg";
+
 function Homepage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -147,6 +149,10 @@ function Homepage() {
   return (
     <div className="homepage-container">
       <nav className="top-nav">
+        <div className="nav">
+          <img src={navicon} alt="navicon" className="icon"></img>
+          <p>Voting Poll</p>
+        </div>
         <p className="user-name">Welcome, {user?.name || "User"}</p>
       </nav>
 
