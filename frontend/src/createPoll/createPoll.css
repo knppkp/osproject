@@ -98,7 +98,7 @@
   position: absolute;
   top: 20px;
   left: 20px;
-  background-color: #4a73f5;
+  background-color: none;
   color: white;
   border: none;
   border-radius: 8px;
@@ -108,11 +108,7 @@
   z-index: 10;
 }
 
-.back-button:hover {
-  background-color: #365cd3;
-}
-
-.back-button p {
-  margin: 0;
-  font-weight: bold;
+.back {
+  width: 20px;
+  height: 20px;
 }

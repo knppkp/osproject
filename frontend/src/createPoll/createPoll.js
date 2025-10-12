@@ -5,6 +5,7 @@ import { z } from "zod";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./createPoll.css";
+import back from "../assets/backButton.svg";
 
 const pollSchema = z.object({
   poll_name: z.string().min(1, { message: "Poll name is required" }),
@@ -123,9 +124,9 @@ function CreatePoll() {
   };
   return (
     <div className="createpoll-container">
-      <button className="back-button" onClick={handleBack}>
-        <p>BACK</p>
-      </button>
+      <p className="back-button" onClick={handleBack}>
+        <img src={back} alt="back" className="back"></img>
+      </p>
       <div className="createpoll-card">
         <h2>Create a New Poll</h2>
 
