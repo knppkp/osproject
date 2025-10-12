@@ -92,6 +92,7 @@ function Homepage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [polls, setPolls] = useState([]);
+  const [viewMode, setViewMode] = useState("all");
 
   useEffect(() => {
     const storedUser = localStorage.getItem("userSession");
@@ -138,6 +139,11 @@ function Homepage() {
     navigate("/createpoll");
   };
 
+  const filteredPolls =
+    viewMode === "user"
+      ? polls.filter((poll) => poll.creator_id === (user?.user_id || user?.id))
+      : polls;
+
   return (
     <div className="homepage-container">
       <nav className="top-nav">
@@ -149,8 +155,12 @@ function Homepage() {
           <li>
             <button onClick={handleCreatePoll}>Create poll</button>
           </li>
-          <li>Home</li>
-          <li>User Poll</li>
+          <li>
+            <button onClick={() => setViewMode("all")}>Home</button>
+          </li>
+          <li>
+            <button onClick={() => setViewMode("user")}>User Poll</button>
+          </li>
           <li>
             <button onClick={handleLogout}>Log Out</button>
           </li>
@@ -159,8 +169,8 @@ function Homepage() {
 
       <main className="main-content">
         <div className="poll-container">
-          {polls.length > 0 ? (
-            polls.map((poll) => (
+          {filteredPolls.length > 0 ? (
+            filteredPolls.map((poll) => (
               <Poll
                 key={poll.poll_id}
                 pollData={poll}
