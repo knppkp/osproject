@@ -90,4 +90,29 @@
 
 .addfont {
   font-family: "Poppins", sans-serif;
+  padding-left: 0.5rem;
+  height: 2rem;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #4a73f5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+  z-index: 10;
+}
+
+.back-button:hover {
+  background-color: #365cd3;
+}
+
+.back-button p {
+  margin: 0;
+  font-weight: bold;
 }
