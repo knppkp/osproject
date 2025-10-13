@@ -34,6 +34,35 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  /* ✅ Allow text wrapping */
+  white-space: normal;
+  word-wrap: break-word;
+  text-align: left;
+
+  /* ✅ Make buttons auto-size to text */
+  min-height: 50px;
+}
+
+.choice-text {
+  position: relative;
+  z-index: 1;
+  font-family: "Poppins", sans-serif;
+
+  /* ✅ Wrap long text */
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  flex: 1; /* let it take up remaining space */
+  text-align: left;
+  margin-right: 10px;
+}
+
+.percent-text {
+  position: relative;
+  z-index: 1;
+  font-weight: 500;
+  flex-shrink: 0; /* keep percentage visible even with long text */
 }
 
 .choice-button:hover {
