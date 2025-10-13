@@ -12,6 +12,7 @@ import voteRoutes from "./routes/voteRoutes.js";
 
 const allowedOrigins = [
   "https://www.vote.knppkp.me/", 
+  "https://vote.knppkp.me/",
   "http://localhost:3000" ,          
 ];
 
@@ -22,7 +23,7 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: allowedOrigins,
-  credentials: true
+  credentials: true,
 }));
 app.use(express.json());
 
