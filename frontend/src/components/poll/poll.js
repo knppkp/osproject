@@ -147,7 +147,7 @@ function Poll({ pollData, userId }) {
       setSelectedVoter(null);
     } catch (err) {
       console.error("Error adding voter:", err);
-      alert("Failed to add voter.");
+      alert("This user has already been added.");
     }
   };
 
