@@ -10,12 +10,20 @@ import pollRoutes from "./routes/pollRoutes.js";
 import choiceRoutes from "./routes/choiceRoutes.js";
 import voteRoutes from "./routes/voteRoutes.js";
 
+const allowedOrigins = [
+  "https://www.vote.knppkp.me/", 
+  "http://localhost:3000" ,          
+];
+
 dotenv.config();
 
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 app.use(express.json());
 
 // Setup Swagger
