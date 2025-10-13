@@ -26,6 +26,7 @@ function CreatePoll() {
   const [selectedVoters, setSelectedVoters] = useState([]);
   const [voterError, setVoterError] = useState("");
   const [storedUser, setStoredUser] = useState(null);
+  const [choiceError, setChoiceError] = useState("");
 
   const {
     register,
@@ -179,10 +180,19 @@ function CreatePoll() {
           <button
             type="button"
             className="add-option"
-            onClick={() => append({ text: "" })}
+            onClick={() => {
+              if (fields.length >= 10) {
+                setChoiceError("You can add up to 10 choices only.");
+                return;
+              }
+              append({ text: "" });
+              setChoiceError("");
+            }}
           >
             Add Choice
           </button>
+
+          {choiceError && <p className="error">{choiceError}</p>}
 
           {/* Voter Search */}
           <label>Add Voters</label>

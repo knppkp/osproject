@@ -11,7 +11,7 @@
 .poll-title {
   font-size: 22px;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .poll-choices {
@@ -260,4 +260,22 @@ hr {
   border: none;
   border-top: 1px solid #ccc;
   margin: 10px 0;
+}
+
+.expired-text {
+  color: #a777e3;
+}
+
+.choice-button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.due-date {
+  font-size: 0.85rem;
+  color: #666;
+  font-family: "Poppins", sans-serif;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: flex-start;
 }

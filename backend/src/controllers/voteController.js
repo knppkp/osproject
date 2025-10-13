@@ -4,13 +4,15 @@ export const submitVote = async (req, res, next) => {
   const { user_id, choice_id } = req.body;
 
   if (!user_id || !choice_id) {
-    return res.status(400).json({ error: "user_id and choice_id are required" });
+    return res
+      .status(400)
+      .json({ error: "user_id and choice_id are required" });
   }
 
   const client = await pool.connect();
 
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
     // Get poll_id for the selected choice
     const choiceResult = await client.query(
@@ -19,7 +21,7 @@ export const submitVote = async (req, res, next) => {
     );
 
     if (choiceResult.rows.length === 0) {
-      await client.query('ROLLBACK');
+      await client.query("ROLLBACK");
       return res.status(404).json({ error: "Choice not found" });
     }
 
@@ -32,8 +34,22 @@ export const submitVote = async (req, res, next) => {
     );
 
     if (authCheck.rows.length === 0) {
-      await client.query('ROLLBACK');
-      return res.status(403).json({ error: "You are not authorized to vote on this poll" });
+      await client.query("ROLLBACK");
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to vote on this poll" });
+    }
+
+    const pollCheck = await client.query(
+      "SELECT due_date FROM poll WHERE poll_id = $1",
+      [poll_id]
+    );
+    const dueDate = new Date(pollCheck.rows[0].due_date);
+    if (dueDate < new Date()) {
+      await client.query("ROLLBACK");
+      return res
+        .status(400)
+        .json({ error: "Poll has ended. You can no longer vote." });
     }
 
     // Check if user already voted on this poll
@@ -45,7 +61,7 @@ export const submitVote = async (req, res, next) => {
     );
 
     if (existingVote.rows.length > 0) {
-      await client.query('ROLLBACK');
+      await client.query("ROLLBACK");
       return res.status(409).json({ code: "already_voted" });
     }
 
@@ -61,11 +77,10 @@ export const submitVote = async (req, res, next) => {
       [choice_id]
     );
 
-    await client.query('COMMIT');
+    await client.query("COMMIT");
     res.status(201).json({ code: "vote_submitted" });
-
   } catch (error) {
-    await client.query('ROLLBACK');
+    await client.query("ROLLBACK");
     next(error);
   } finally {
     client.release();
@@ -76,13 +91,15 @@ export const changeVote = async (req, res, next) => {
   const { user_id, new_choice_id } = req.body;
 
   if (!user_id || !new_choice_id) {
-    return res.status(400).json({ error: "user_id and new_choice_id are required" });
+    return res
+      .status(400)
+      .json({ error: "user_id and new_choice_id are required" });
   }
 
   const client = await pool.connect();
 
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
     // Get poll_id for the new choice
     const choiceResult = await client.query(
@@ -91,7 +108,7 @@ export const changeVote = async (req, res, next) => {
     );
 
     if (choiceResult.rows.length === 0) {
-      await client.query('ROLLBACK');
+      await client.query("ROLLBACK");
       return res.status(404).json({ error: "Choice not found" });
     }
 
@@ -104,8 +121,28 @@ export const changeVote = async (req, res, next) => {
     );
 
     if (authCheck.rows.length === 0) {
-      await client.query('ROLLBACK');
-      return res.status(403).json({ error: "You are not authorized to change vote on this poll" });
+      await client.query("ROLLBACK");
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to change vote on this poll" });
+    }
+
+    const pollCheck = await client.query(
+      "SELECT due_date FROM poll WHERE poll_id = $1",
+      [poll_id]
+    );
+
+    if (pollCheck.rows.length === 0) {
+      await client.query("ROLLBACK");
+      return res.status(404).json({ error: "Poll not found" });
+    }
+
+    const dueDate = new Date(pollCheck.rows[0].due_date);
+    if (dueDate < new Date()) {
+      await client.query("ROLLBACK");
+      return res
+        .status(400)
+        .json({ error: "Poll has ended. You cannot change your vote." });
     }
 
     // Check if user already voted on this poll
@@ -117,16 +154,20 @@ export const changeVote = async (req, res, next) => {
     );
 
     if (existingVote.rows.length === 0) {
-      await client.query('ROLLBACK');
-      return res.status(400).json({ error: "You haven't voted on this poll yet" });
+      await client.query("ROLLBACK");
+      return res
+        .status(400)
+        .json({ error: "You haven't voted on this poll yet" });
     }
 
     const previousChoiceId = existingVote.rows[0].choice_id;
 
     // If the user tries to change to the same choice
     if (previousChoiceId === new_choice_id) {
-      await client.query('ROLLBACK');
-      return res.status(400).json({ error: "You have already voted for this choice" });
+      await client.query("ROLLBACK");
+      return res
+        .status(400)
+        .json({ error: "You have already voted for this choice" });
     }
 
     // Update vote
@@ -146,11 +187,12 @@ export const changeVote = async (req, res, next) => {
       [new_choice_id]
     );
 
-    await client.query('COMMIT');
-    res.status(200).json({ message: "Your vote has been changed successfully" });
-
+    await client.query("COMMIT");
+    res
+      .status(200)
+      .json({ message: "Your vote has been changed successfully" });
   } catch (error) {
-    await client.query('ROLLBACK');
+    await client.query("ROLLBACK");
     next(error);
   } finally {
     client.release();
@@ -159,7 +201,7 @@ export const changeVote = async (req, res, next) => {
 
 export const getUserVotesForPoll = async (req, res, next) => {
   const { pollId, userId } = req.params;
-  
+
   try {
     const result = await pool.query(
       `SELECT v.*, c.choice_text 
@@ -168,7 +210,7 @@ export const getUserVotesForPoll = async (req, res, next) => {
        WHERE c.poll_id = $1 AND v.user_id = $2`,
       [pollId, userId]
     );
-    
+
     res.json(result.rows);
   } catch (error) {
     next(error);
@@ -177,7 +219,7 @@ export const getUserVotesForPoll = async (req, res, next) => {
 
 export const getPollResults = async (req, res, next) => {
   const { pollId } = req.params;
-  
+
   try {
     const result = await pool.query(
       `SELECT 
@@ -196,7 +238,7 @@ export const getPollResults = async (req, res, next) => {
        ORDER BY c.point DESC`,
       [pollId]
     );
-    
+
     res.json(result.rows);
   } catch (error) {
     next(error);

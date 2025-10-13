@@ -17,9 +17,13 @@ function Poll({ pollData, userId }) {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedVoter, setSelectedVoter] = useState(null);
   const [voterError, setVoterError] = useState("");
+  const [choiceError, setChoiceError] = useState("");
 
   const menuRef = useRef(null);
+
   const pollId = pollData?.poll_id;
+  const isPollExpired =
+    pollData?.due_date && new Date(pollData.due_date) < new Date();
 
   useEffect(() => {
     if (!pollId || !userId) return;
@@ -56,6 +60,11 @@ function Poll({ pollData, userId }) {
   }, []);
 
   const handleVote = async (choiceId) => {
+    if (isPollExpired) {
+      alert("This poll has ended. Voting is closed.");
+      return;
+    }
+
     try {
       if (!userVote) {
         await axios.post("/api/votes", {
@@ -143,7 +152,16 @@ function Poll({ pollData, userId }) {
   };
 
   const handleAddChoice = async () => {
-    if (!newChoiceText.trim()) return alert("Please enter choice text");
+    if (choices.length >= 10) {
+      setChoiceError("You can only have up to 10 choices in a poll.");
+      return;
+    }
+
+    if (!newChoiceText.trim()) {
+      setChoiceError("Choice text cannot be empty.");
+      return;
+    }
+
     try {
       await axios.post("/api/choices", {
         choice_text: newChoiceText,
@@ -152,9 +170,11 @@ function Poll({ pollData, userId }) {
       alert("Choice added successfully.");
       setShowAddChoice(false);
       setNewChoiceText("");
+      setChoiceError("");
       window.location.reload();
     } catch (err) {
       console.error("Error adding choice:", err);
+      setChoiceError("Failed to add choice. Please try again.");
     }
   };
 
@@ -193,6 +213,20 @@ function Poll({ pollData, userId }) {
         )}
       </div>
 
+      {pollData.due_date && (
+        <p className="due-date">
+          Due:{" "}
+          {new Date(pollData.due_date).toLocaleString("en-US", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          })}
+        </p>
+      )}
+
       <div className="poll-choices">
         {choices.map((choice) => (
           <button
@@ -201,13 +235,12 @@ function Poll({ pollData, userId }) {
               userVote === choice.choice_id ? "selected" : ""
             }`}
             onClick={() => handleVote(choice.choice_id)}
+            disabled={isPollExpired}
           >
             {showResults && (
               <div
                 className="progress-fill-button"
-                style={{
-                  width: `${choice.percentage || 0}%`,
-                }}
+                style={{ width: `${choice.percentage || 0}%` }}
               />
             )}
             <span className="choice-text">{choice.choice_text}</span>
@@ -218,6 +251,9 @@ function Poll({ pollData, userId }) {
             )}
           </button>
         ))}
+        {/* {isPollExpired && (
+          <p className="expired-text">Voting has closed for this poll.</p>
+        )} */}
       </div>
 
       {showAddVoter && (
@@ -284,6 +320,8 @@ function Poll({ pollData, userId }) {
               value={newChoiceText}
               onChange={(e) => setNewChoiceText(e.target.value)}
             />
+            {choiceError && <p className="error">{choiceError}</p>}
+
             <div className="dialog-actions">
               <button onClick={handleAddChoice}>Add</button>
               <button onClick={() => setShowAddChoice(false)}>Cancel</button>
