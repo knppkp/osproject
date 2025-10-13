@@ -208,8 +208,28 @@ function CreatePoll() {
           {/* Search Results */}
           {searchTerm && (
             <ul className="search-results">
+              <li
+                key="all-users"
+                onClick={() => {
+                  setSelectedVoters(
+                    users.filter(
+                      (u) =>
+                        u.user_id !== (storedUser?.id || storedUser?.user_id)
+                    )
+                  );
+                  setSearchTerm("");
+                  setVoterError("");
+                }}
+                className="search-item all-users"
+              >
+                Add All Users
+              </li>
               {filteredUsers.map((u) => (
-                <li key={u.user_id} onClick={() => addVoter(u)}>
+                <li
+                  key={u.user_id}
+                  onClick={() => addVoter(u)}
+                  className="search-item"
+                >
                   {u.name} ({u.email})
                 </li>
               ))}

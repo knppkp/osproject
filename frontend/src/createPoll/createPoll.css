@@ -123,3 +123,30 @@
   width: 20px;
   height: 20px;
 }
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.search-item {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.search-item:hover {
+  background-color: #e0f0ff;
+  transform: scale(1.02);
+}
+
+.search-item.all-users {
+  font-weight: bold;
+  color: #2d6cdf;
+}

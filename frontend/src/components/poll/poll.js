@@ -198,9 +198,29 @@ function Poll({ pollData, userId }) {
 
             {menuOpen && (
               <div className="menu-dropdown">
-                <button onClick={() => setShowAddVoter(true)}>Add Voter</button>
+                <button
+                  onClick={() => {
+                    if (isPollExpired) {
+                      alert("Cannot add voters after poll due date.");
+                      return;
+                    }
+                    setShowAddVoter(true);
+                  }}
+                  disabled={isPollExpired}
+                >
+                  Add Voter
+                </button>
                 <hr />
-                <button onClick={() => setShowAddChoice(true)}>
+                <button
+                  onClick={() => {
+                    if (isPollExpired) {
+                      alert("Cannot add choices after poll due date.");
+                      return;
+                    }
+                    setShowAddChoice(true);
+                  }}
+                  disabled={isPollExpired}
+                >
                   Add Choice
                 </button>
                 <hr />

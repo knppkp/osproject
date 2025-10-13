@@ -279,3 +279,26 @@ hr {
   display: flex;
   align-items: flex-start;
 }
+
+.search-results li {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.search-results li:hover {
+  background-color: #e0f0ff;
+}
+
+.voter-list {
+  list-style: none;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.voter-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
