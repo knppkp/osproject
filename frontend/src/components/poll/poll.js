@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import api from "../../api";
+import axios from "axios";
 import "./poll.css";
 
 function Poll({ pollData, userId }) {
@@ -31,8 +31,8 @@ function Poll({ pollData, userId }) {
     const fetchData = async () => {
       try {
         const [userRes, resultsRes] = await Promise.all([
-          api.get(`/api/votes/poll/${pollId}/user/${userId}`),
-          api.get(`/api/votes/results/${pollId}`),
+          axios.get(`/api/votes/poll/${pollId}/user/${userId}`),
+          axios.get(`/api/votes/results/${pollId}`),
         ]);
 
         const userVoteData = userRes.data[0];
@@ -67,20 +67,20 @@ function Poll({ pollData, userId }) {
 
     try {
       if (!userVote) {
-        await api.post("/api/votes", {
+        await axios.post("/api/votes", {
           user_id: userId,
           choice_id: choiceId,
         });
         setUserVote(choiceId);
       } else if (userVote !== choiceId) {
-        await api.post("/api/votes/change", {
+        await axios.post("/api/votes/change", {
           user_id: userId,
           new_choice_id: choiceId,
         });
         setUserVote(choiceId);
       }
 
-      const res = await api.get(`/api/votes/results/${pollId}`);
+      const res = await axios.get(`/api/votes/results/${pollId}`);
       setChoices(res.data);
       setShowResults(true);
     } catch (err) {
@@ -91,7 +91,7 @@ function Poll({ pollData, userId }) {
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this poll?")) return;
     try {
-      await api.delete(`/api/polls/${pollId}`);
+      await axios.delete(`/api/polls/${pollId}`);
       alert("Poll deleted successfully.");
       window.location.reload();
     } catch (err) {
@@ -103,7 +103,7 @@ function Poll({ pollData, userId }) {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await api.get("/api/users");
+        const res = await axios.get("/api/users");
         setUsers(res.data);
       } catch (err) {
         console.error("Failed to load users:", err);
@@ -138,7 +138,7 @@ function Poll({ pollData, userId }) {
     if (!selectedVoter) return alert("Please select a user before adding.");
 
     try {
-      await api.post(`/api/polls/${pollId}/voters`, {
+      await axios.post(`/api/polls/${pollId}/voters`, {
         user_id: selectedVoter.user_id,
       });
 
@@ -163,7 +163,7 @@ function Poll({ pollData, userId }) {
     }
 
     try {
-      await api.post("/api/choices", {
+      await axios.post("/api/choices", {
         choice_text: newChoiceText,
         poll_id: pollId,
       });

@@ -85,7 +85,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Poll from "../components/poll/poll";
-import api from "../api";
+import axios from "axios";
 import "./homePage.css";
 
 import navicon from "../assets/navicon.svg";
@@ -106,7 +106,7 @@ function Homepage() {
       // Fetch polls for this user
       const fetchUserPolls = async () => {
         try {
-          const res = await api.get(
+          const res = await axios.get(
             `/api/polls/user/${parsedUser.user_id || parsedUser.id}`
           );
           console.log("User polls:", res.data);
@@ -114,7 +114,7 @@ function Homepage() {
           // For each poll, fetch choices and voters
           const detailedPolls = await Promise.all(
             res.data.map(async (poll) => {
-              const pollDetail = await api.get(`/api/polls/${poll.poll_id}`);
+              const pollDetail = await axios.get(`/api/polls/${poll.poll_id}`);
               return pollDetail.data;
             })
           );

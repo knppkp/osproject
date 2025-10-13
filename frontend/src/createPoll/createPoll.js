@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import api from "../api";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./createPoll.css";
 import back from "../assets/backButton.svg";
@@ -51,7 +51,7 @@ function CreatePoll() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await api.get("/api/users");
+        const res = await axios.get("/api/users");
         setUsers(res.data);
       } catch (err) {
         console.error("Failed to load users:", err);
@@ -102,7 +102,7 @@ function CreatePoll() {
       };
 
       console.log("Sending payload:", payload);
-      await api.post("/api/polls", payload);
+      await axios.post("/api/polls", payload);
 
       alert("Poll created successfully!");
       reset();

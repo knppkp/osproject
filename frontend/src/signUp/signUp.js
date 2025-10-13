@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import api from "../api";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "./signUp.css";
 
@@ -39,7 +39,7 @@ function SignUp() {
   });
 
   const onSubmit = (data) => {
-    api
+    axios
       .post("/api/users/register", {
         name: data.name,
         email: data.email,
