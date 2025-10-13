@@ -159,10 +159,10 @@ function Homepage() {
       <aside className="sidebar">
         <ul>
           <li>
-            <button onClick={handleCreatePoll}>Create poll</button>
+            <button onClick={() => setViewMode("all")}>Home</button>
           </li>
           <li>
-            <button onClick={() => setViewMode("all")}>Home</button>
+            <button onClick={handleCreatePoll}>Create poll</button>
           </li>
           <li>
             <button onClick={() => setViewMode("user")}>User Poll</button>
