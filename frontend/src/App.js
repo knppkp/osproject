@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import axios from "axios";
+import api from "../src/api";
 import { Link, useNavigate } from "react-router-dom";
 import "./App.css";
 
@@ -29,7 +29,7 @@ function App() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("/api/users/login", {
+      const response = await api.post("/api/users/login", {
         email: data.email,
         password: data.password,
       });

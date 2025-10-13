@@ -32,6 +32,8 @@ services:
     build:
       context: ./frontend
       dockerfile: ./Dockerfile.frontend
+      args:
+        REACT_APP_API_URL: https://vote-oifw.onrender.com
     container_name: frontend_app
     environment:
       NODE_ENV: development
