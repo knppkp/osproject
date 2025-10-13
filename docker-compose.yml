@@ -14,7 +14,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: ../Dockerfile.backend
+      dockerfile: ./Dockerfile.backend
     container_name: backend_app
     env_file:
       - ./backend/.env
@@ -31,7 +31,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: ../Dockerfile.frontend
+      dockerfile: ./Dockerfile.frontend
     container_name: frontend_app
     environment:
       NODE_ENV: development
