@@ -178,6 +178,15 @@ function Poll({ pollData, userId }) {
     }
   };
 
+  useEffect(() => {
+    if (showAddVoter) {
+      setSelectedVoter(null);
+      setVoterError("");
+      setSearchTerm("");
+      setFilteredUsers([]);
+    }
+  }, [showAddVoter]);
+
   if (loading) return <p>Loading poll...</p>;
   if (!pollData) return <p>No poll data found.</p>;
 
