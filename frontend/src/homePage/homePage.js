@@ -159,10 +159,10 @@ function Homepage() {
       <aside className="sidebar">
         <ul>
           <li>
-            <button onClick={handleCreatePoll}>Create poll</button>
+            <button onClick={() => setViewMode("all")}>Home</button>
           </li>
           <li>
-            <button onClick={() => setViewMode("all")}>Home</button>
+            <button onClick={handleCreatePoll}>Create poll</button>
           </li>
           <li>
             <button onClick={() => setViewMode("user")}>User Poll</button>
@@ -172,8 +172,15 @@ function Homepage() {
           </li>
         </ul>
       </aside>
-
       <main className="main-content">
+        {viewMode === "user" ? (
+          <h2 className="poll-header">
+            All Polls Created by {user?.name || "You"}
+          </h2>
+        ) : (
+          <h2 className="poll-header">All Polls</h2>
+        )}
+
         <div className="poll-container">
           {filteredPolls.length > 0 ? (
             filteredPolls.map((poll) => (

@@ -63,7 +63,7 @@ body {
 /* Sidebar */
 .sidebar {
   position: fixed;
-  top: 60px;
+  top: 0px;
   left: 0;
   width: 200px;
   bottom: 0;
