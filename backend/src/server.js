@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { pool } from "./config/database.js";
+import { initDatabase } from "./config/initDatabase.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { setupSwagger } from "./swagger/swagger.js";
 
@@ -74,7 +75,17 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Backend running on port ${PORT}`);
-  console.log(`API Documentation: http://localhost:${PORT}/api-docs`);
-});
+const startServer = async () => {
+  try {
+    await initDatabase();
+    app.listen(PORT, () => {
+      console.log(`Backend running on port ${PORT}`);
+      console.log(`API Documentation: http://localhost:${PORT}/api-docs`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+};
+
+startServer();
