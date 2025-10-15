@@ -39,7 +39,7 @@ export const loginUser = async (req, res, next) => {
     );
     
     if (result.rows.length === 0) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ error: "This Email user doesn't exist" });
     }
     
     const user = result.rows[0];
