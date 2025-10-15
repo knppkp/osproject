@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { pool } from "./config/database.js";
-import { initDatabase } from "./config/initDatabase.js";
+import { initDatabase } from "./config/initdb.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { setupSwagger } from "./swagger/swagger.js";
 
