@@ -172,8 +172,15 @@ function Homepage() {
           </li>
         </ul>
       </aside>
-
       <main className="main-content">
+        {viewMode === "user" ? (
+          <h2 className="poll-header">
+            All Polls Created by {user?.name || "You"}
+          </h2>
+        ) : (
+          <h2 className="poll-header">All Polls</h2>
+        )}
+
         <div className="poll-container">
           {filteredPolls.length > 0 ? (
             filteredPolls.map((poll) => (
