@@ -11,8 +11,8 @@ import choiceRoutes from "./routes/choiceRoutes.js";
 import voteRoutes from "./routes/voteRoutes.js";
 
 const allowedOrigins = [
-  "https://www.vote.knppkp.me/", 
-  "https://vote.knppkp.me/",
+  "https://www.vote.knppkp.me", 
+  "https://vote.knppkp.me",
   "http://localhost:3000" ,          
 ];
 
@@ -23,16 +23,22 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow curl/postman
+    if (!origin) return callback(null, true);
+    
     if (allowedOrigins.indexOf(origin) === -1) {
-      return callback(new Error("Not allowed by CORS"), false);
+      const msg = `The CORS policy for this site does not allow access from origin ${origin}`;
+      return callback(new Error(msg), false);
     }
     return callback(null, true);
   },
   credentials: true,
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Length', 'X-Request-Id'],
+  maxAge: 86400 // Cache preflight requests for 24 hours
 }));
+
+app.options('*', cors());
 
 // Setup Swagger
 setupSwagger(app);
