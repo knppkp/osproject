@@ -21,21 +21,35 @@ dotenv.config();
 const app = express();
 
 // Middleware
+app.use((req, res, next) => {
+  console.log('=== Incoming Request ===');
+  console.log('Origin:', req.headers.origin);
+  console.log('Method:', req.method);
+  console.log('Path:', req.path);
+  next();
+});
+
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
+    console.log('CORS Check - Origin:', origin);
+    console.log('CORS Check - Allowed:', allowedOrigins);
+    
+    if (!origin) {
+      console.log('No origin, allowing request');
+      return callback(null, true);
+    }
     
     if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from origin ${origin}`;
-      return callback(new Error(msg), false);
+      console.log('Origin NOT in allowed list');
+      return callback(null, false);
     }
+    
+    console.log('Origin allowed!');
     return callback(null, true);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['Content-Length', 'X-Request-Id'],
-  maxAge: 86400 // Cache preflight requests for 24 hours
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 
