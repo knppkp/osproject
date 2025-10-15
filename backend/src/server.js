@@ -38,7 +38,6 @@ app.use(cors({
   maxAge: 86400 // Cache preflight requests for 24 hours
 }));
 
-app.options('*', cors());
 
 // Setup Swagger
 setupSwagger(app);
