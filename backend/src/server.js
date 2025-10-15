@@ -20,38 +20,31 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use((req, res, next) => {
   console.log('=== Incoming Request ===');
   console.log('Origin:', req.headers.origin);
   console.log('Method:', req.method);
   console.log('Path:', req.path);
+  console.log('Body:', req.body);
   next();
 });
 
+// Middleware
 app.use(cors({
   origin: function (origin, callback) {
-    console.log('CORS Check - Origin:', origin);
-    console.log('CORS Check - Allowed:', allowedOrigins);
-    
-    if (!origin) {
-      console.log('No origin, allowing request');
-      return callback(null, true);
-    }
-    
+    if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) === -1) {
-      console.log('Origin NOT in allowed list');
       return callback(null, false);
     }
-    
-    console.log('Origin allowed!');
     return callback(null, true);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
 
 // Setup Swagger
 setupSwagger(app);
